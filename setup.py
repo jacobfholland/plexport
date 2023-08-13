@@ -10,6 +10,6 @@ setup(
         ],
     },
     install_requires=[
-        "plexapi", "coloredlogs"
+        "plexapi", "coloredlogs", "openpyxl"
     ],
 )
