@@ -39,20 +39,20 @@ class Export:
         except KeyboardInterrupt:
             logging.warning(
                 f"Ctrl + C User interrupt. Shutting down gracefully...")
-        # except Exception as e:
-        #     logging.warning(f"Failed to export to {format.upper()}: {e}")
+        except Exception as e:
+            logging.warning(f"Failed to export to {format.upper()}: {e}")
 
     def write_movies_to_csv(self, movies, filename):
         with open(filename, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             headers = ['Name', 'Year', 'Link', 'Rating', 'Summary', 'Duration (mins)', 'Genres', 'Directors', 'Writers',
-                       'Actors', 'Resolution', 'Codec', 'Container', 'Bitrate', 'Size (MiB)', 'Audio Channels', 'Added At', 'Updated At']
+                       'Actors', 'Resolution', 'Codec', 'Container', 'Bitrate', 'Size (MB)', 'Audio Channels', 'Added At', 'Updated At']
             writer.writerow(headers)
             for movie in movies:
                 movie_data = self.write_movie(movie)
                 writer.writerow(self.values_in_order(movie_data))
                 logging.info(
-                    f"Movie Exported: {movie_data.get('Name')} ({movie_data.get('Year')})")
+                    f"Movie Exported: {movie_data.get('title')} ({movie_data.get('year')})")
 
     def write_tvshows_to_csv(self, shows, filename):
         with open(filename, mode='w', newline='', encoding='utf-8') as file:
@@ -95,7 +95,7 @@ class Export:
         wb = Workbook()
         ws = wb.active
         headers = ['Name', 'Year', 'Link', 'Rating', 'Summary', 'Duration (mins)', 'Genres', 'Directors', 'Writers',
-                   'Actors', 'Resolution', 'Codec', 'Container', 'Bitrate', 'Size (MiB)', 'Audio Channels', 'Added At', 'Updated At']
+                   'Actors', 'Resolution', 'Codec', 'Container', 'Bitrate', 'Size (MB)', 'Audio Channels', 'Added At', 'Updated At']
         ws.append(headers)
         for movie in movies:
             movie_data = self.write_movie(movie)
@@ -139,7 +139,7 @@ class Export:
         # This function assumes data is a dict containing movie details.
         # We can use it to order our data correctly for CSV and Excel rows.
         return [data.get(header) for header in ['Name', 'Year', 'Link', 'Rating', 'Summary', 'Duration (mins)', 'Genres', 'Directors', 'Writers',
-                                                'Actors', 'Resolution', 'Codec', 'Container', 'Bitrate', 'Size (MiB)', 'Audio Channels', 'Added At', 'Updated At']]
+                                                'Actors', 'Resolution', 'Codec', 'Container', 'Bitrate', 'Size (MB)', 'Audio Channels', 'Added At', 'Updated At']]
 
     def write_movie(self, movie):
         # This function returns a dictionary of movie details.
@@ -152,13 +152,13 @@ class Export:
         codec = movie.media[0].videoCodec
         container = movie.media[0].container
         bitrate = movie.media[0].bitrate
-        size_mb = movie.media[0].parts[0].size / (1024 ** 2)
+        size_mb = movie.media[0].size / (1024 * 1024)
         audio_channels = movie.media[0].audioChannels
         added_at = movie.addedAt.strftime("%Y-%m-%d %H:%M:%S")
         updated_at = movie.updatedAt.strftime("%Y-%m-%d %H:%M:%S")
         duration_mins = movie.duration // 60000  # Convert from ms to mins
 
-        return {
+        movie_data = {
             'Name': movie.title,
             'Year': movie.year,
             'Link': link,
@@ -173,8 +173,9 @@ class Export:
             'Codec': codec,
             'Container': container,
             'Bitrate': bitrate,
-            'Size (MiB)': round(size_mb, 2),
+            'Size (MB)': round(size_mb, 2),
             'Audio Channels': audio_channels,
             'Added At': added_at,
             'Updated At': updated_at
         }
+        return movie_data

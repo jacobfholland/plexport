@@ -13,7 +13,7 @@ def export(args):
     if not os.path.exists(EXPORT_DIR):
         os.makedirs(EXPORT_DIR)
     try:
-        Export(plex, EXPORT_DIR).csv()
+        Export(plex, EXPORT_DIR).export(format="csv")
     except KeyboardInterrupt:
         logging.warning(
             "Ctrl + C User interrupt. Shutting down gracefully...")
