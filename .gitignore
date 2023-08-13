@@ -1,3 +1,55 @@
+# Ignore Plexport output directories
 exports/**
 logs/**
-venv
+
+
+# Ignore Python virtual environments
+__pycache__/
+*.py[cod]
+
+# Ignore pipenv virtual environment
+Pipfile
+Pipfile.lock
+
+# Ignore Poetry virtual environment
+pyproject.toml
+poetry.lock
+
+# Ignore venv virtual environment (standard library)
+venv/
+
+# Ignore Conda virtual environment
+.env/
+.conda/
+
+# Ignore pipenv-generated virtual environment
+.virtualenvs/
+
+# Ignore pyenv virtual environment
+.python-version
+
+# Ignore virtualenvwrapper virtual environment
+.venv/
+
+# Ignore .direnv directory
+.direnv/
+
+# Ignore local settings file
+settings_local.py
+
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.pycharm
+
+# Ignore other miscellaneous files
+*.log
+*.csv
+
+# Distribution files
+dist/
+build/
+plexport.egg-info
