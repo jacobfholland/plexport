@@ -11,34 +11,36 @@ class Export:
         self.export_dir = export_dir
 
     def csv(self):
+        SECTIONS = os.environ.get("SECTIONS", "all_sections").split(",")
         try:
             for section in self.plex.library.sections():
-                if section.type == 'movie':
-                    logging.info(
-                        f"Processing library section: {section.title}")
-                    movies = section.all()
-                    filename = os.path.join(
-                        self.export_dir, f"{section.title}.csv")
-                    self.write_movies_to_csv(movies, filename)
-                elif section.type == 'show':
-                    logging.info(
-                        f"Processing library section: {section.title}")
-                    shows = section.all()
-                    filename = os.path.join(
-                        self.export_dir, f"{section.title}.csv")
-                    self.write_tvshows_to_csv(shows, filename)
-                elif section.type == 'artist':
-                    logging.info(
-                        f"Processing library section: {section.title}")
-                    artists = section.all()
-                    filename = os.path.join(
-                        self.export_dir, f"{section.title}.csv")
-                    self.write_music_to_csv(artists, filename)
+                if "all_sections" in SECTIONS or section.title in SECTIONS:
+                    if section.type == 'movie':
+                        logging.info(
+                            f"Processing library section: {section.title}")
+                        movies = section.all()
+                        filename = os.path.join(
+                            self.export_dir, f"{section.title}.csv")
+                        self.write_movies_to_csv(movies, filename)
+                    elif section.type == 'show':
+                        logging.info(
+                            f"Processing library section: {section.title}")
+                        shows = section.all()
+                        filename = os.path.join(
+                            self.export_dir, f"{section.title}.csv")
+                        self.write_tvshows_to_csv(shows, filename)
+                    elif section.type == 'artist':
+                        logging.info(
+                            f"Processing library section: {section.title}")
+                        artists = section.all()
+                        filename = os.path.join(
+                            self.export_dir, f"{section.title}.csv")
+                        self.write_music_to_csv(artists, filename)
         except KeyboardInterrupt:
             logging.warning(
                 "Ctrl + C User interrupt. Shutting down gracefully...")
-        # except Exception as e:
-        #     logging.warning(f"Failed to export to CSV: {e}")
+        except Exception as e:
+            logging.warning(f"Failed to export to CSV: {e}")
 
     def write_movie(self, movie):
         if movie.guid is None or movie.guid.startswith("local://"):

@@ -10,9 +10,11 @@ def cli_entry():
     parser = argparse.ArgumentParser(
         description='Plexport - A utility for exporting and matching Plex library items.')
     subparsers = parser.add_subparsers(title='Subcommands', dest='subcommand')
+
     export_parser = subparsers.add_parser(
         'export', help='Export Plex library items.')
     export_parser.set_defaults(func=export)
+
     init_parser = subparsers.add_parser(
         'init', help='Initialize environment variables')
     init_parser.set_defaults(func=set_environment)
@@ -24,6 +26,8 @@ def cli_entry():
                              help='Directory for log files')
     init_parser.add_argument(
         '--log-level', default='info', help='Log level for the application')
+    init_parser.add_argument('--sections', help='Sections to be scanned')
+
     parser.set_defaults(func=export)
     args = parser.parse_args()
     args.func(args)

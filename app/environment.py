@@ -50,9 +50,17 @@ def set_environment(args):
     else:
         os.environ['LOG_LEVEL'] = "info"
 
+    if args.sections:
+        os.environ['SECTIONS'] = args.sections
+    elif os.environ.get("SECTIONS"):
+        os.environ['SECTIONS'] = os.environ.get("SECTIONS")
+    else:
+        os.environ['SECTIONS'] = ["all_sections"]
+
     with open('.env', 'w') as f:
         f.write(f"PLEX_URL={os.environ.get('PLEX_URL')}\n")
         f.write(f"PLEX_TOKEN={os.environ.get('PLEX_TOKEN')}\n")
         f.write(f"EXPORT_DIR={os.environ.get('EXPORT_DIR')}\n")
         f.write(f"LOG_DIR={os.environ.get('LOG_DIR')}\n")
         f.write(f"LOG_LEVEL={os.environ.get('LOG_LEVEL')}\n")
+        f.write(f"SECTIONS={os.environ.get('SECTIONS')}\n")
