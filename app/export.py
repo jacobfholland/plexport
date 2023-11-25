@@ -155,7 +155,10 @@ class Export:
         size_mb = movie.media[0].parts[0].size / (1024 ** 2)
         audio_channels = movie.media[0].audioChannels
         added_at = movie.addedAt.strftime("%Y-%m-%d %H:%M:%S")
-        updated_at = movie.updatedAt.strftime("%Y-%m-%d %H:%M:%S")
+        try:
+            updated_at = movie.updatedAt.strftime("%Y-%m-%d %H:%M:%S")
+        except AttributeError as e:
+            updated_at = None
         duration_mins = movie.duration // 60000  # Convert from ms to mins
 
         return {
